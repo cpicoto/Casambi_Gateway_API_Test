@@ -36,7 +36,7 @@ namespace UDP_WPF
         private bool _IsConfigEnabled = true;
         public bool IsConfigEnabled { get => _IsConfigEnabled; set => Set(ref _IsConfigEnabled, value); }
 
-        private IPAddress _IP = IPAddress.Parse("192.168.20.255");
+        private IPAddress _IP = IPAddress.Parse("192.168.1.81");
         public IPAddress IP { get => _IP; set => Set(ref _IP, value); }
 
         private ushort _Port = 10009;
@@ -179,13 +179,13 @@ namespace UDP_WPF
         private async void Test()
         {
             var casambiID = 1;
-
+            var MyNetID = 0;
             while (IsTesting)
             {
-                AddLogLines($"test: {casambiID}/251");
+                AddLogLines($"test: {MyNetID}/{casambiID}/251");
 
                 // send signal
-                var signal = $"{NetID}.72.2.39.{casambiID:X2}";
+                var signal = $"{MyNetID}.72.2.39.{casambiID:X2}";
                 if (!Send(signal)) break;
 
                 // inc casambi id
@@ -195,6 +195,7 @@ namespace UDP_WPF
                 else
                 {
                     casambiID = 1;
+                    MyNetID++;
                     AddLogLines(new string('-', 32));
                 }
                 TestProgress = casambiID - 1;
@@ -355,7 +356,7 @@ namespace UDP_WPF
             try
             {
                 sender.SendTo(buffer, ep);
-                AddLogLines($"sended to {ep}: {txt}");
+                //AddLogLines($"sended to {ep}: {txt}");
                 return true;
             }
             catch (Exception ex)
